@@ -437,6 +437,12 @@ td {
 html,
 body {
   height: 100%;
+/*
+  background:url("/uploads/Monody.jpg");
+  background-repeat:no-repeat;
+  background-position: right bottom ;
+  background-attachment:fixed;   
+  */
 }
 .container {
   position: relative;
@@ -1823,7 +1829,7 @@ pre .javascript .function {
   width: 4px;
   height: 4px;
   border-radius: 50%;
-  background: #37ff0b;
+  background: #21a879;
 }
 .links-of-blogroll {
   font-size: 13px;
