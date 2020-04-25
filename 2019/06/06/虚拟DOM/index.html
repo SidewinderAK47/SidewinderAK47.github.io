@@ -68,7 +68,7 @@
 
 
 
-  <meta name="keywords" content="Hexo, NexT" />
+  <meta name="keywords" content="blog," />
 
 
 
@@ -81,17 +81,22 @@
 
 
 
-<meta name="description" content="Welcome to Hexo! This is your very first post. Check documentation for more info. If you get any problems when using Hexo, you can find the answer in troubleshooting or you can ask me on GitHub. Quick">
+<meta name="description" content="[TOC] 虚拟DOM一直都听说DOM很慢，要尽量少的去操作DOM，于是就想进一步去探究下为什么大家都会这样说，在网上学习了一些资料，这边整理出来。 　　首先，DOM对象本身也是一个js对象，所以严格来说，并不是操作这个对象慢，而是说操作了这个对象后，会触发一些浏览器行为，比如布局（layout）和绘制（paint）。下面主要先介绍下这些浏览器行为，阐述一个页面是怎么最终被呈现出来的，另外还会从代">
+<meta name="keywords" content="blog">
 <meta property="og:type" content="article">
-<meta property="og:title" content="Hello World">
-<meta property="og:url" content="http://yoursite.com/2018/10/06/hello-world/index.html">
+<meta property="og:title" content="虚拟DOM">
+<meta property="og:url" content="http://yoursite.com/2019/06/06/虚拟DOM/index.html">
 <meta property="og:site_name" content="Sidewinder&#39;s Blog">
-<meta property="og:description" content="Welcome to Hexo! This is your very first post. Check documentation for more info. If you get any problems when using Hexo, you can find the answer in troubleshooting or you can ask me on GitHub. Quick">
+<meta property="og:description" content="[TOC] 虚拟DOM一直都听说DOM很慢，要尽量少的去操作DOM，于是就想进一步去探究下为什么大家都会这样说，在网上学习了一些资料，这边整理出来。 　　首先，DOM对象本身也是一个js对象，所以严格来说，并不是操作这个对象慢，而是说操作了这个对象后，会触发一些浏览器行为，比如布局（layout）和绘制（paint）。下面主要先介绍下这些浏览器行为，阐述一个页面是怎么最终被呈现出来的，另外还会从代">
 <meta property="og:locale" content="default">
-<meta property="og:updated_time" content="2018-10-06T06:53:36.599Z">
+<meta property="og:image" content="http://yoursite.com/2019/06/06/虚拟DOM/虚拟DOM.assets/1-20160219104627034-1997891554.jpg">
+<meta property="og:image" content="http://yoursite.com/2019/06/06/虚拟DOM/虚拟DOM.assets/1-20160219104627034-1997891554-1559826000109.jpg">
+<meta property="og:image" content="http://yoursite.com/2019/06/06/虚拟DOM/虚拟DOM.assets/1-20160219104627128-1703439703.jpg">
+<meta property="og:updated_time" content="2019-06-06T13:32:09.795Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="Hello World">
-<meta name="twitter:description" content="Welcome to Hexo! This is your very first post. Check documentation for more info. If you get any problems when using Hexo, you can find the answer in troubleshooting or you can ask me on GitHub. Quick">
+<meta name="twitter:title" content="虚拟DOM">
+<meta name="twitter:description" content="[TOC] 虚拟DOM一直都听说DOM很慢，要尽量少的去操作DOM，于是就想进一步去探究下为什么大家都会这样说，在网上学习了一些资料，这边整理出来。 　　首先，DOM对象本身也是一个js对象，所以严格来说，并不是操作这个对象慢，而是说操作了这个对象后，会触发一些浏览器行为，比如布局（layout）和绘制（paint）。下面主要先介绍下这些浏览器行为，阐述一个页面是怎么最终被呈现出来的，另外还会从代">
+<meta name="twitter:image" content="http://yoursite.com/2019/06/06/虚拟DOM/虚拟DOM.assets/1-20160219104627034-1997891554.jpg">
 
 
 
@@ -121,13 +126,13 @@
 
 
 
-  <link rel="canonical" href="http://yoursite.com/2018/10/06/hello-world/"/>
+  <link rel="canonical" href="http://yoursite.com/2019/06/06/虚拟DOM/"/>
 
 
 
 
 
-  <title>Hello World | Sidewinder's Blog</title>
+  <title>虚拟DOM | Sidewinder's Blog</title>
   
 
 
@@ -274,7 +279,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/10/06/hello-world/">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/06/06/虚拟DOM/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="Sidewinder_AK47">
@@ -291,7 +296,7 @@
 
         
         
-          <h1 class="post-title" itemprop="name headline">Hello World</h1>
+          <h1 class="post-title" itemprop="name headline">虚拟DOM</h1>
         
 
         <div class="post-meta">
@@ -303,8 +308,8 @@
               
                 <span class="post-meta-item-text">Posted on</span>
               
-              <time title="Post created" itemprop="dateCreated datePublished" datetime="2018-10-06T14:53:36+08:00">
-                2018-10-06
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2019-06-06T21:31:18+08:00">
+                2019-06-06
               </time>
             
 
@@ -314,6 +319,39 @@
           </span>
 
           
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">In</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/前端/" itemprop="url" rel="index">
+                    <span itemprop="name">前端</span>
+                  </a>
+                </span>
+
+                
+                
+                  , 
+                
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/前端/虚拟DOM/" itemprop="url" rel="index">
+                    <span itemprop="name">虚拟DOM</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
 
           
             
@@ -322,9 +360,9 @@
                 <span class="post-meta-item-icon">
                   <i class="fa fa-comment-o"></i>
                 </span>
-                <a href="/2018/10/06/hello-world/#comments" itemprop="discussionUrl">
+                <a href="/2019/06/06/虚拟DOM/#comments" itemprop="discussionUrl">
                   <span class="post-comments-count disqus-comment-count"
-                        data-disqus-identifier="2018/10/06/hello-world/" itemprop="commentCount"></span>
+                        data-disqus-identifier="2019/06/06/虚拟DOM/" itemprop="commentCount"></span>
                 </a>
               </span>
             
@@ -352,15 +390,43 @@
       
 
       
-        <p>Welcome to <a href="https://hexo.io/" target="_blank" rel="noopener">Hexo</a>! This is your very first post. Check <a href="https://hexo.io/docs/" target="_blank" rel="noopener">documentation</a> for more info. If you get any problems when using Hexo, you can find the answer in <a href="https://hexo.io/docs/troubleshooting.html" target="_blank" rel="noopener">troubleshooting</a> or you can ask me on <a href="https://github.com/hexojs/hexo/issues" target="_blank" rel="noopener">GitHub</a>.</p>
-<h2 id="Quick-Start"><a href="#Quick-Start" class="headerlink" title="Quick Start"></a>Quick Start</h2><h3 id="Create-a-new-post"><a href="#Create-a-new-post" class="headerlink" title="Create a new post"></a>Create a new post</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ hexo new <span class="string">"My New Post"</span></span><br></pre></td></tr></table></figure>
-<p>More info: <a href="https://hexo.io/docs/writing.html" target="_blank" rel="noopener">Writing</a></p>
-<h3 id="Run-server"><a href="#Run-server" class="headerlink" title="Run server"></a>Run server</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ hexo server</span><br></pre></td></tr></table></figure>
-<p>More info: <a href="https://hexo.io/docs/server.html" target="_blank" rel="noopener">Server</a></p>
-<h3 id="Generate-static-files"><a href="#Generate-static-files" class="headerlink" title="Generate static files"></a>Generate static files</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ hexo generate</span><br></pre></td></tr></table></figure>
-<p>More info: <a href="https://hexo.io/docs/generating.html" target="_blank" rel="noopener">Generating</a></p>
-<h3 id="Deploy-to-remote-sites"><a href="#Deploy-to-remote-sites" class="headerlink" title="Deploy to remote sites"></a>Deploy to remote sites</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ hexo deploy</span><br></pre></td></tr></table></figure>
-<p>More info: <a href="https://hexo.io/docs/deployment.html" target="_blank" rel="noopener">Deployment</a></p>
+        <p>[TOC]</p>
+<h1 id="虚拟DOM"><a href="#虚拟DOM" class="headerlink" title="虚拟DOM"></a>虚拟DOM</h1><p>一直都听说DOM很慢，要尽量少的去操作DOM，于是就想进一步去探究下为什么大家都会这样说，在网上学习了一些资料，这边整理出来。</p>
+<p>　　首先，DOM对象本身也是一个js对象，所以严格来说，并不是操作这个对象慢，而是说操作了这个对象后，会触发一些浏览器行为，比如布局（layout）和绘制（paint）。下面主要先介绍下这些浏览器行为，阐述一个页面是怎么最终被呈现出来的，另外还会从代码的角度，来说明一些不好的实践以及一些优化方案。</p>
+<h2 id="浏览器是如何呈现一张页面的"><a href="#浏览器是如何呈现一张页面的" class="headerlink" title="　　浏览器是如何呈现一张页面的"></a>　　浏览器是如何呈现一张页面的</h2><p>　　一个浏览器有许多模块，其中负责呈现页面的是渲染引擎模块，比较熟悉的有WebKit和Gecko等，这里也只会涉及这个模块的内容。</p>
+<p>　　先用文字大致阐述下这个过程：</p>
+<ul>
+<li>解析HTML，并生成一棵DOM tree</li>
+<li>解析各种样式并结合DOM tree生成一棵Render tree</li>
+<li>对Render tree的各个节点计算布局信息，比如box的位置与尺寸</li>
+<li>根据Render tree并利用浏览器的UI层进行绘制</li>
+</ul>
+<p>　　其中DOM tree和Render tree上的节点并非一一对应，比如一个”<code>display:none&quot;</code>的节点就只会存在于DOM tree上，而不会出现在Render tree上，因为这个节点不需要被绘制。</p>
+<p><img src="虚拟DOM.assets/1-20160219104627034-1997891554.jpg" alt="img"></p>
+<p>　　上图是Webkit的基本流程，在术语上和Gecko可能会有不同，这里贴上Gecko的流程图，不过文章下面的内容都会统一使用Webkit的术语。</p>
+<p><img src="虚拟DOM.assets/1-20160219104627034-1997891554-1559826000109.jpg" alt=""></p>
+<p>　　影响页面呈现的因素有许多，比如link的位置会影响首屏呈现等。但这里主要集中讨论与layout相关的内容。</p>
+<p>　　paint是一个耗时的过程，然而layout是一个更耗时的过程，我们无法确定layout一定是自上而下或是自下而上进行的，甚至一次layout会牵涉到整个文档布局的重新计算。</p>
+<p>　　但是layout是肯定无法避免的，所以我们主要是要最小化layout的次数。</p>
+<h2 id="什么情况下浏览器会进行layout"><a href="#什么情况下浏览器会进行layout" class="headerlink" title="　　什么情况下浏览器会进行layout"></a>　　什么情况下浏览器会进行layout</h2><p>　　在考虑如何最小化layout次数之前，要先了解什么时候浏览器会进行layout。</p>
+<p>　　layout（reflow）一般被称为布局，这个操作是用来计算文档中元素的位置和大小，是渲染前重要的一步。在HTML第一次被加载的时候，会有一次layout之外，js脚本的执行和样式的改变同样会导致浏览器执行layout，这也是本文的主要要讨论的内容。</p>
+<p>　　一般情况下，浏览器的layout是lazy的，也就是说：在js脚本执行时，是不会去更新DOM的，任何对DOM的修改都会被暂存在一个队列中，在当前js的执行上下文完成执行后，会根据这个队列中的修改，进行一次layout。</p>
+<p>　　然而有时希望在js代码中立刻获取最新的DOM节点信息，浏览器就不得不提前执行layout，这是导致DOM性能问题的主因。</p>
+<p>　　如下的操作会打破常规，并触发浏览器执行layout：</p>
+<ul>
+<li>通过js获取需要计算的DOM属性</li>
+<li>添加或删除DOM元素</li>
+<li>resize浏览器窗口大小</li>
+<li>改变字体</li>
+<li>css伪类的激活，比如:hover</li>
+<li>通过js修改DOM元素样式且该样式涉及到尺寸的改变</li>
+</ul>
+<p>　　我们来通过一个例子直观的感受下：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line">// Read</span><br><span class="line">var h1 = element1.clientHeight;</span><br><span class="line"></span><br><span class="line">// Write (invalidates layout)</span><br><span class="line">element1.style.height = (h1 * 2) + &apos;px&apos;;</span><br><span class="line"></span><br><span class="line">// Read (triggers layout)</span><br><span class="line">var h2 = element2.clientHeight;</span><br><span class="line"></span><br><span class="line">// Write (invalidates layout)</span><br><span class="line">element2.style.height = (h2 * 2) + &apos;px&apos;;</span><br><span class="line"></span><br><span class="line">// Read (triggers layout)</span><br><span class="line">var h3 = element3.clientHeight;</span><br><span class="line"></span><br><span class="line">// Write (invalidates layout)</span><br><span class="line">element3.style.height = (h3 * 2) + &apos;px&apos;;</span><br></pre></td></tr></table></figure>
+<p>　　clientHeight，这个属性是需要计算得到的，于是就会触发浏览器的一次layout。我们来利用chrome（v47.0）的开发者工具看下（截图中的timeline record已经经过筛选，仅显示layout）：</p>
+<p><img src="虚拟DOM.assets/1-20160219104627128-1703439703.jpg" alt="img"></p>
+<p>上面的例子中，代码首先修改了一个元素的样式，接下来读取另一个元素的<code>clientHeight</code>属性，由于之前的修改导致当前DOM被标记为脏，为了保证能准确的获取这个属性，浏览器会进行一次layout（我们发现chrome的开发者工具良心的提示了我们这个性能问题）。</p>
+<p>　　优化这段代码很简单，预先读取所需要的属性，在一起修改即可。</p>
 
       
     </div>
@@ -376,6 +442,12 @@
 
     <footer class="post-footer">
       
+        <div class="post-tags">
+          
+            <a href="/tags/blog/" rel="tag"># blog</a>
+          
+        </div>
+      
 
       
       
@@ -385,15 +457,15 @@
         <div class="post-nav">
           <div class="post-nav-next post-nav-item">
             
+              <a href="/2019/04/05/修改笔记/" rel="next" title="职称系统修改笔记">
+                <i class="fa fa-chevron-left"></i> 职称系统修改笔记
+              </a>
+            
           </div>
 
           <span class="post-nav-divider"></span>
 
           <div class="post-nav-prev post-nav-item">
-            
-              <a href="/2018/10/06/post-title/" rel="prev" title="post-title">
-                post-title <i class="fa fa-chevron-right"></i>
-              </a>
             
           </div>
         </div>
@@ -574,7 +646,7 @@
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#Quick-Start"><span class="nav-number">1.</span> <span class="nav-text">Quick Start</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#Create-a-new-post"><span class="nav-number">1.1.</span> <span class="nav-text">Create a new post</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Run-server"><span class="nav-number">1.2.</span> <span class="nav-text">Run server</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Generate-static-files"><span class="nav-number">1.3.</span> <span class="nav-text">Generate static files</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Deploy-to-remote-sites"><span class="nav-number">1.4.</span> <span class="nav-text">Deploy to remote sites</span></a></li></ol></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#虚拟DOM"><span class="nav-number">1.</span> <span class="nav-text">虚拟DOM</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#浏览器是如何呈现一张页面的"><span class="nav-number">1.1.</span> <span class="nav-text">　　浏览器是如何呈现一张页面的</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#什么情况下浏览器会进行layout"><span class="nav-number">1.2.</span> <span class="nav-text">　　什么情况下浏览器会进行layout</span></a></li></ol></li></ol></div>
             
 
           </div>
@@ -744,9 +816,9 @@
     
       <script type="text/javascript">
         var disqus_config = function () {
-          this.page.url = 'http://yoursite.com/2018/10/06/hello-world/';
-          this.page.identifier = '2018/10/06/hello-world/';
-          this.page.title = 'Hello World';
+          this.page.url = 'http://yoursite.com/2019/06/06/虚拟DOM/';
+          this.page.identifier = '2019/06/06/虚拟DOM/';
+          this.page.title = '虚拟DOM';
         };
         var d = document, s = d.createElement('script');
         s.src = 'https://SidewinderAK47.disqus.com/embed.js';

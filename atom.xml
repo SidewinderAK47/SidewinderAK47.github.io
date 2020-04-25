@@ -6,7 +6,7 @@
   <link href="/atom.xml" rel="self"/>
   
   <link href="http://yoursite.com/"/>
-  <updated>2019-04-05T05:13:09.900Z</updated>
+  <updated>2019-06-06T13:32:09.795Z</updated>
   <id>http://yoursite.com/</id>
   
   <author>
@@ -15,6 +15,34 @@
   </author>
   
   <generator uri="http://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title>虚拟DOM</title>
+    <link href="http://yoursite.com/2019/06/06/%E8%99%9A%E6%8B%9FDOM/"/>
+    <id>http://yoursite.com/2019/06/06/虚拟DOM/</id>
+    <published>2019-06-06T13:31:18.000Z</published>
+    <updated>2019-06-06T13:32:09.795Z</updated>
+    
+    <content type="html"><![CDATA[<p>[TOC]</p><h1 id="虚拟DOM"><a href="#虚拟DOM" class="headerlink" title="虚拟DOM"></a>虚拟DOM</h1><p>一直都听说DOM很慢，要尽量少的去操作DOM，于是就想进一步去探究下为什么大家都会这样说，在网上学习了一些资料，这边整理出来。</p><p>　　首先，DOM对象本身也是一个js对象，所以严格来说，并不是操作这个对象慢，而是说操作了这个对象后，会触发一些浏览器行为，比如布局（layout）和绘制（paint）。下面主要先介绍下这些浏览器行为，阐述一个页面是怎么最终被呈现出来的，另外还会从代码的角度，来说明一些不好的实践以及一些优化方案。</p><h2 id="浏览器是如何呈现一张页面的"><a href="#浏览器是如何呈现一张页面的" class="headerlink" title="　　浏览器是如何呈现一张页面的"></a>　　浏览器是如何呈现一张页面的</h2><p>　　一个浏览器有许多模块，其中负责呈现页面的是渲染引擎模块，比较熟悉的有WebKit和Gecko等，这里也只会涉及这个模块的内容。</p><p>　　先用文字大致阐述下这个过程：</p><ul><li>解析HTML，并生成一棵DOM tree</li><li>解析各种样式并结合DOM tree生成一棵Render tree</li><li>对Render tree的各个节点计算布局信息，比如box的位置与尺寸</li><li>根据Render tree并利用浏览器的UI层进行绘制</li></ul><p>　　其中DOM tree和Render tree上的节点并非一一对应，比如一个”<code>display:none&quot;</code>的节点就只会存在于DOM tree上，而不会出现在Render tree上，因为这个节点不需要被绘制。</p><p><img src="虚拟DOM.assets/1-20160219104627034-1997891554.jpg" alt="img"></p><p>　　上图是Webkit的基本流程，在术语上和Gecko可能会有不同，这里贴上Gecko的流程图，不过文章下面的内容都会统一使用Webkit的术语。</p><p><img src="虚拟DOM.assets/1-20160219104627034-1997891554-1559826000109.jpg" alt=""></p><p>　　影响页面呈现的因素有许多，比如link的位置会影响首屏呈现等。但这里主要集中讨论与layout相关的内容。</p><p>　　paint是一个耗时的过程，然而layout是一个更耗时的过程，我们无法确定layout一定是自上而下或是自下而上进行的，甚至一次layout会牵涉到整个文档布局的重新计算。</p><p>　　但是layout是肯定无法避免的，所以我们主要是要最小化layout的次数。</p><h2 id="什么情况下浏览器会进行layout"><a href="#什么情况下浏览器会进行layout" class="headerlink" title="　　什么情况下浏览器会进行layout"></a>　　什么情况下浏览器会进行layout</h2><p>　　在考虑如何最小化layout次数之前，要先了解什么时候浏览器会进行layout。</p><p>　　layout（reflow）一般被称为布局，这个操作是用来计算文档中元素的位置和大小，是渲染前重要的一步。在HTML第一次被加载的时候，会有一次layout之外，js脚本的执行和样式的改变同样会导致浏览器执行layout，这也是本文的主要要讨论的内容。</p><p>　　一般情况下，浏览器的layout是lazy的，也就是说：在js脚本执行时，是不会去更新DOM的，任何对DOM的修改都会被暂存在一个队列中，在当前js的执行上下文完成执行后，会根据这个队列中的修改，进行一次layout。</p><p>　　然而有时希望在js代码中立刻获取最新的DOM节点信息，浏览器就不得不提前执行layout，这是导致DOM性能问题的主因。</p><p>　　如下的操作会打破常规，并触发浏览器执行layout：</p><ul><li>通过js获取需要计算的DOM属性</li><li>添加或删除DOM元素</li><li>resize浏览器窗口大小</li><li>改变字体</li><li>css伪类的激活，比如:hover</li><li>通过js修改DOM元素样式且该样式涉及到尺寸的改变</li></ul><p>　　我们来通过一个例子直观的感受下：</p><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line">// Read</span><br><span class="line">var h1 = element1.clientHeight;</span><br><span class="line"></span><br><span class="line">// Write (invalidates layout)</span><br><span class="line">element1.style.height = (h1 * 2) + &apos;px&apos;;</span><br><span class="line"></span><br><span class="line">// Read (triggers layout)</span><br><span class="line">var h2 = element2.clientHeight;</span><br><span class="line"></span><br><span class="line">// Write (invalidates layout)</span><br><span class="line">element2.style.height = (h2 * 2) + &apos;px&apos;;</span><br><span class="line"></span><br><span class="line">// Read (triggers layout)</span><br><span class="line">var h3 = element3.clientHeight;</span><br><span class="line"></span><br><span class="line">// Write (invalidates layout)</span><br><span class="line">element3.style.height = (h3 * 2) + &apos;px&apos;;</span><br></pre></td></tr></table></figure><p>　　clientHeight，这个属性是需要计算得到的，于是就会触发浏览器的一次layout。我们来利用chrome（v47.0）的开发者工具看下（截图中的timeline record已经经过筛选，仅显示layout）：</p><p><img src="虚拟DOM.assets/1-20160219104627128-1703439703.jpg" alt="img"></p><p>上面的例子中，代码首先修改了一个元素的样式，接下来读取另一个元素的<code>clientHeight</code>属性，由于之前的修改导致当前DOM被标记为脏，为了保证能准确的获取这个属性，浏览器会进行一次layout（我们发现chrome的开发者工具良心的提示了我们这个性能问题）。</p><p>　　优化这段代码很简单，预先读取所需要的属性，在一起修改即可。</p>]]></content>
+    
+    <summary type="html">
+    
+      
+      
+        &lt;p&gt;[TOC]&lt;/p&gt;
+&lt;h1 id=&quot;虚拟DOM&quot;&gt;&lt;a href=&quot;#虚拟DOM&quot; class=&quot;headerlink&quot; title=&quot;虚拟DOM&quot;&gt;&lt;/a&gt;虚拟DOM&lt;/h1&gt;&lt;p&gt;一直都听说DOM很慢，要尽量少的去操作DOM，于是就想进一步去探究下为什么大家都会这样说，
+      
+    
+    </summary>
+    
+      <category term="前端" scheme="http://yoursite.com/categories/%E5%89%8D%E7%AB%AF/"/>
+    
+      <category term="虚拟DOM" scheme="http://yoursite.com/categories/%E5%89%8D%E7%AB%AF/%E8%99%9A%E6%8B%9FDOM/"/>
+    
+    
+      <category term="blog" scheme="http://yoursite.com/tags/blog/"/>
+    
+  </entry>
   
   <entry>
     <title>职称系统修改笔记</title>
